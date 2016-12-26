@@ -5,7 +5,7 @@ namespace Estante\Entities;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Category extends Model implements Transformable
+class Category extends Model
 {
     
 

@@ -9,7 +9,7 @@ use Prettus\Repository\Eloquent\BaseRepository;
  * Class CategoryRepositoryRepositoryEloquent
  * @package namespace Estante\Repositories;
  */
-class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepositoryRepository
+class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepository
 {
     /**
      * Specify Model class name

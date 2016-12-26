@@ -5,51 +5,26 @@ namespace Estante\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Estante\Http\Requests;
-use Prettus\Validator\Contracts\ValidatorInterface;
-use Prettus\Validator\Exceptions\ValidatorException;
-use Estante\Http\Requests\CategoryCreateRequest;
-use Estante\Http\Requests\CategoryUpdateRequest;
 use Estante\Repositories\CategoryRepository;
-use Estante\Validators\CategoryValidator;
+use Estante\Services\CategoryService;
 
 
 class CategoriesController extends Controller
 {
 
-    /**
-     * @var CategoryRepository
-     */
     protected $repository;
+    protected $service;
 
-    /**
-     * @var CategoryValidator
-     */
-    protected $validator;
-
-    public function __construct(CategoryRepository $repository, CategoryValidator $validator)
+    public function __construct(CategoryRepository $repository, CategoryService $service)
     {
         $this->repository = $repository;
-        $this->validator  = $validator;
+        $this->service  = $service;
     }
 
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
         $categories = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $categories,
-            ]);
-        }
-
         return view('categories.index', compact('categories'));
     }
 
