@@ -63,14 +63,6 @@ class CategoriesController extends Controller
     }
 
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  CategoryUpdateRequest $request
-     * @param  string            $id
-     *
-     * @return Response
-     */
     public function update(Request $request, $id)
     {
 
@@ -86,25 +78,11 @@ class CategoriesController extends Controller
     }
 
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
     public function destroy($id)
     {
-        $deleted = $this->repository->delete($id);
+        $this->repository->find($id)->delete();
 
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'message' => 'Category deleted.',
-                'deleted' => $deleted,
-            ]);
-        }
-
-        return redirect()->back()->with('message', 'Category deleted.');
+        return redirect()->route("admin.category.index");
     }
 }
