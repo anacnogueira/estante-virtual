@@ -54,17 +54,6 @@ class CategoriesController extends Controller
         return redirect()->route('admin.category.index');
     }
 
-
-   
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
 
@@ -82,38 +71,18 @@ class CategoriesController extends Controller
      *
      * @return Response
      */
-    public function update(CategoryUpdateRequest $request, $id)
+    public function update(Request $request, $id)
     {
 
-        try {
+        $errors = $this->service->update($request->all(), $id);
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
-            $category = $this->repository->update($id, $request->all());
-
-            $response = [
-                'message' => 'Category updated.',
-                'data'    => $category->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+        if (is_array($errors)) {            
+            return redirect()->route('admin.category.edit', $id)
+            ->withErrors($errors)
+            ->withInput();
         }
+
+        return redirect()->route('admin.category.index');
     }
 
 
