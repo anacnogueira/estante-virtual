@@ -28,6 +28,12 @@ class CategoriesController extends Controller
         return view('categories.index', compact('categories'));
     }
 
+    public function show($id)
+    {
+        $category = $this->repository->find($id);
+        return view('categories.show', compact('category'));
+    }
+
     public function create()
     {
         
@@ -67,19 +73,7 @@ class CategoriesController extends Controller
     }
 
 
-    public function show($id)
-    {
-        $category = $this->repository->find($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $category,
-            ]);
-        }
-
-        return view('categories.show', compact('category'));
-    }
+   
 
 
     /**

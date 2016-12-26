@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('htmlheader_title')
-    Autores
+    Categorias
 @stop
 
 @section('contentheader_title')
-    Autores
+    Categorias
   @stop
 
 @section('contentheader_description')
@@ -13,7 +13,7 @@
 @stop
 
 @section('contentheader_breadcrumb')
-    <li><a href="{{ route('admin.author.index') }}"><i class="fa fa-dashboard"></i> Autores</a></li>
+    <li><a href="{{ route('admin.category.index') }}"><i class="fa fa-dashboard"></i> Categoria</a></li>
     <li class="active">Visualizar</li>
 @stop
 
@@ -29,9 +29,7 @@
                                 <div class="col-md-12">
                                    <dl>
                                         <dt>Nome: </dt>
-                                        <dd>{{ $author->name }}&nbsp;</dd>  
-                                        <dt>Descrição: </dt>
-                                        <dd>{{ $author->description }}&nbsp;</dd>
+                                        <dd>{{ $category->name }}&nbsp;</dd>  
                                     </dl>        
                                 </div>
                             </div>    
@@ -43,7 +41,7 @@
                 <div class="col-md-12">
                     <div class="actions">
                         <ul>
-                            <li><a href="{{ route('admin.author.index') }}" class="btn btn-warning"><i class="fa fa-list-alt"></i> Listar</a></li>                            
+                            <li><a href="{{ route('admin.category.index') }}" class="btn btn-warning"><i class="fa fa-list-alt"></i> Listar</a></li>                            
                         </ul>
                     </div>
                 </div>
