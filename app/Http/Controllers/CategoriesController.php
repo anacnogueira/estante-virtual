@@ -40,36 +40,18 @@ class CategoriesController extends Controller
     }
 
 
-    public function store(CategoryCreateRequest $request)
+    public function store(Request $request)
     {
 
-        try {
+        $errors = $this->service->create($request->all());
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $category = $this->repository->create($request->all());
-
-            $response = [
-                'message' => 'Category created.',
-                'data'    => $category->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+        if (is_array($errors)) {            
+            return redirect()->route('admin.category.create')
+            ->withErrors($errors)
+            ->withInput();
         }
+
+        return redirect()->route('admin.category.index');
     }
 
 
