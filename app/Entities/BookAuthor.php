@@ -3,13 +3,10 @@
 namespace Estante\Entities;
 
 use Illuminate\Database\Eloquent\Model;
-use Prettus\Repository\Contracts\Transformable;
-use Prettus\Repository\Traits\TransformableTrait;
 
-class BookAuthor extends Model implements Transformable
+
+class BookAuthor extends Model 
 {
-    use TransformableTrait;
-
     protected $fillable = [
     	'book_id',
     	'author_id'

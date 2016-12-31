@@ -5,123 +5,79 @@ namespace Estante\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Estante\Http\Requests;
-use Prettus\Validator\Contracts\ValidatorInterface;
-use Prettus\Validator\Exceptions\ValidatorException;
-use Estante\Http\Requests\BookCreateRequest;
-use Estante\Http\Requests\BookUpdateRequest;
 use Estante\Repositories\BookRepository;
-use Estante\Validators\BookValidator;
+use Estante\Repositories\AuthorRepository;
+use Estante\Repositories\CategoryRepository;
+use Estante\Services\BookService;
 
 
 class BooksController extends Controller
 {
 
-    /**
-     * @var BookRepository
-     */
     protected $repository;
+    protected $service;
+    protected $author;
+    protected $category;
 
-    /**
-     * @var BookValidator
-     */
-    protected $validator;
-
-    public function __construct(BookRepository $repository, BookValidator $validator)
+    public function __construct(
+        BookRepository $repository, 
+        BookService $service, 
+        AuthorRepository $author,
+        CategoryRepository $category
+    )
     {
         $this->repository = $repository;
-        $this->validator  = $validator;
+        $this->service  = $service;
+        $this->author = $author;
+        $this->category = $category;
     }
 
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+        
         $books = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $books,
-            ]);
-        }
 
         return view('books.index', compact('books'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  BookCreateRequest $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function store(BookCreateRequest $request)
-    {
-
-        try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $book = $this->repository->create($request->all());
-
-            $response = [
-                'message' => 'Book created.',
-                'data'    => $book->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
-    }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $book = $this->repository->find($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $book,
-            ]);
-        }
-
         return view('books.show', compact('book'));
     }
 
+    public function create()
+    {
+        $authors = [];
+        $data = $this->author->all();
+        foreach ($data as $item) {
+            $authors[$item->id] = $item->name;   
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+        $categories = [];
+        $data = $this->category->all();
+        foreach ($data as $item) {
+            $categories[$item->id] = $item->name;   
+        }
+        return view('books.create', compact('authors','categories'));
+    }
+
+
+    public function store(Request $request)
+    {
+
+        $errors = $this->service->create($request->all());
+
+        if (is_array($errors)) {            
+            return redirect()->route('admin.book.create')
+            ->withErrors($errors)
+            ->withInput();
+        }
+
+        return redirect()->route('admin.book.index');
+    }
+
     public function edit($id)
     {
 
@@ -130,69 +86,25 @@ class BooksController extends Controller
         return view('books.edit', compact('book'));
     }
 
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  BookUpdateRequest $request
-     * @param  string            $id
-     *
-     * @return Response
-     */
-    public function update(BookUpdateRequest $request, $id)
+    public function update(Request $request, $id)
     {
 
-        try {
+       $errors = $this->service->update($request->all(), $id);
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
-            $book = $this->repository->update($id, $request->all());
-
-            $response = [
-                'message' => 'Book updated.',
-                'data'    => $book->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+        if (is_array($errors)) {            
+            return redirect()->route('admin.book.edit', $id)
+            ->withErrors($errors)
+            ->withInput();
         }
+
+        return redirect()->route('admin.book.index');
     }
 
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        $deleted = $this->repository->delete($id);
+         $this->repository->find($id)->delete();
 
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'message' => 'Book deleted.',
-                'deleted' => $deleted,
-            ]);
-        }
-
-        return redirect()->back()->with('message', 'Book deleted.');
+        return redirect()->route("admin.book.index");
     }
 }

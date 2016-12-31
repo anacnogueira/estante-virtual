@@ -38,12 +38,12 @@ Route::group(['prefix'=>'categorias'], function(){
 });
 
 /* Books */
-// Route::group(['prefix'=>'livros'], function(){
-// 	Route::get('/', ['as' => 'admin.book.index', 'uses' => 'BooksController@index']);
-// 	Route::get('ver/{id}', ['as' => 'admin.book.show', 'uses' => 'BooksController@show']);
-// 	Route::get('adicionar', ['as' => 'admin.book.create', 'uses' => 'BooksController@create']);
-// 	Route::post('store', ['as' => 'admin.book.store', 'uses' => 'BooksController@store']);
-// 	Route::get('editar/{id}', ['as' => 'admin.book.edit', 'uses' =>'BooksController@edit']);
-// 	Route::put('update/{id}', ['as' => 'admin.book.update','uses' => 'BooksController@update']);
-// 	Route::delete('excluir/{id}', ['as' => 'admin.book.destroy', 'uses' => 'BooksController@destroy']);
-// });
+Route::group(['prefix'=>'livros'], function(){
+	Route::get('/', ['as' => 'admin.book.index', 'uses' => 'BooksController@index']);
+	Route::get('ver/{id}', ['as' => 'admin.book.show', 'uses' => 'BooksController@show']);
+	Route::get('adicionar', ['as' => 'admin.book.create', 'uses' => 'BooksController@create']);
+	Route::post('store', ['as' => 'admin.book.store', 'uses' => 'BooksController@store']);
+	Route::get('editar/{id}', ['as' => 'admin.book.edit', 'uses' =>'BooksController@edit']);
+	Route::put('update/{id}', ['as' => 'admin.book.update','uses' => 'BooksController@update']);
+	Route::delete('excluir/{id}', ['as' => 'admin.book.destroy', 'uses' => 'BooksController@destroy']);
+});

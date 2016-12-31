@@ -14,4 +14,9 @@ class Author extends Model
 
     public $timestamps = false;
 
+
+    public function books()
+    {
+    	return $this->hasMany('Estante\Entities\Book');
+    }
 }

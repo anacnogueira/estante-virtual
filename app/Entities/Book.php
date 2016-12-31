@@ -1,14 +1,11 @@
 <?php
 
 namespace Estante\Entities;
-
 use Illuminate\Database\Eloquent\Model;
-use Prettus\Repository\Contracts\Transformable;
-use Prettus\Repository\Traits\TransformableTrait;
 
-class Book extends Model implements Transformable
+
+class Book extends Model
 {
-    use TransformableTrait;
 
     protected $fillable = [
     	'title',
@@ -18,5 +15,15 @@ class Book extends Model implements Transformable
     	'read',
     	'type'
     ];
+
+    public function authors()
+    {
+    	return $this->hasMany('Estante\Entities\Author')->orderBy('name');
+    }
+
+    public function category()
+    {
+    	return $this->hasOne('Estante\Entities\Category');
+    }
 
 }

@@ -21,6 +21,7 @@ class CreateTableBooks extends Migration
             $table->string('isbn');
             $table->boolean('read');
             $table->enum('type',['paper','ebook']);
+            $table->text('summary');
             $table->timestamps();
 
             $table->foreign('category_id')->references('id')->on('categories');
