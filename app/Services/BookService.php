@@ -18,9 +18,11 @@ class BookService
 
 	public function create(array $data)
 	{
+
 		try {
 			$this->validator->with($data)->passesOrFail();
-			$this->repository->create($data);
+			$book = $this->repository->create($data);
+			$this->saveAuthors($book, $data['author_id']);
 
 			return true;
 		} catch (ValidatorException $e) {
@@ -34,8 +36,11 @@ class BookService
 	public function update(array $data, $id)
 	{
 		try {
+			
+			$book = $this->repository->find($id);
 			$this->validator->with($data)->passesOrFail();
 			$this->repository->update($data, $id);
+			$this->saveAuthors($book, $data['author_id']);
 			return true;
 		} catch (ValidatorException $e) {
 			return [
@@ -43,5 +48,10 @@ class BookService
 				'message' => $e->getMessageBag()
 			];
 		}
+	}
+
+	private function saveAuthors($book, $authorId)
+	{
+		return $book->authors()->sync($authorId);
 	}
 }

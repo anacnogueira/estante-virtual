@@ -13,17 +13,18 @@ class Book extends Model
     	'pages',
     	'isbn',
     	'read',
-    	'type'
+    	'type',
+        'summary'
     ];
 
     public function authors()
     {
-    	return $this->hasMany('Estante\Entities\Author')->orderBy('name');
+    	return $this->belongsToMany('Estante\Entities\Author');
     }
 
     public function category()
     {
-    	return $this->hasOne('Estante\Entities\Category');
+    	return $this->belongsTo('Estante\Entities\Category');
     }
 
 }

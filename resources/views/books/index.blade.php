@@ -11,7 +11,7 @@
             <a href="{{ route('admin.book.create')}}" class="btn btn-primary btn-xs"><i class="fa fa-pencil" aria-hidden="true"></i> Adicionar</a>
         </li>
         <li>
-            <a href="#" class="btn btn-success btn-xs"><i class="fa fa-book" aria-hidden="true"></i> A ser lido</a>
+            <a href="{{ route('admin.book.toBeRead') }}" class="btn btn-success btn-xs"><i class="fa fa-book" aria-hidden="true"></i> A ser lido</a>
         </li>
     </ul>
     
@@ -72,9 +72,13 @@
                                                     <a href="{{ route('admin.book.show',['id' => $book['id']]) }}" class ='btn btn-primary'><i class="fa fa-eye"></i> Visualizar</a>
                                                    &nbsp; &nbsp;
                                                 </td>
-                                                <td>Autores</td>
-                                                <td>Categoria</td>
-                                                <td>Lido</td>
+                                                <td>
+                                                    @foreach($book->authors as $author)
+                                                        {{ $author->name  }}<br>
+                                                    @endforeach
+                                                </td>
+                                                <td>{{ $book->category->name }}</td>
+                                                <td>{{ $book->read == 1 ? 'Sim' : 'Não' }}</td>
 
                                             </tr>
                                             @endforeach

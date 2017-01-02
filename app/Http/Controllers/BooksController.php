@@ -83,7 +83,19 @@ class BooksController extends Controller
 
         $book = $this->repository->find($id);
 
-        return view('books.edit', compact('book'));
+        $authors = [];
+        $data = $this->author->all();
+        foreach ($data as $item) {
+            $authors[$item->id] = $item->name;   
+        }
+
+        $categories = [];
+        $data = $this->category->all();
+        foreach ($data as $item) {
+            $categories[$item->id] = $item->name;   
+        }
+
+        return view('books.edit', compact('book','authors', 'categories'));
     }
 
     public function update(Request $request, $id)
@@ -98,6 +110,18 @@ class BooksController extends Controller
         }
 
         return redirect()->route('admin.book.index');
+    }
+
+    public function toBeRead()
+    {
+        $book = $this->repository
+        ->findWhere(['read'=>0]);      
+ 
+
+        $book = $book->shuffle()->slice(0,1);
+        $book = $book[0];    
+
+        return view('books.toBeRead', compact('book'));
     }
 
 

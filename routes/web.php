@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('admin.book.index');
 });
 
 /* Authors */
@@ -46,4 +46,5 @@ Route::group(['prefix'=>'livros'], function(){
 	Route::get('editar/{id}', ['as' => 'admin.book.edit', 'uses' =>'BooksController@edit']);
 	Route::put('update/{id}', ['as' => 'admin.book.update','uses' => 'BooksController@update']);
 	Route::delete('excluir/{id}', ['as' => 'admin.book.destroy', 'uses' => 'BooksController@destroy']);
+	Route::get('a-ser-lido', ['as' => 'admin.book.toBeRead', 'uses' => 'BooksController@toBeRead']);
 });

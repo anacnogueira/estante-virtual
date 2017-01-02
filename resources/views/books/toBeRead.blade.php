@@ -9,12 +9,12 @@
   @stop
 
 @section('contentheader_description')
-    Visualizar
+    A ser lido
 @stop
 
 @section('contentheader_breadcrumb')
     <li><a href="{{ route('admin.book.index') }}"><i class="fa fa-dashboard"></i> Livros</a></li>
-    <li class="active">Visualizar</li>
+    <li class="active">A ser lido</li>
 @stop
 
 @section('content')

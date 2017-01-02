@@ -12,9 +12,7 @@
                 }               
               }              
             }
-          @endphp
-
-          
+          @endphp          
         </div>
       </div>
 
@@ -23,12 +21,12 @@
           <p>Os campos com * são obrigatórios</p>
           <div class="form-group @if (array_key_exists('title', $errors)) has-error @endif">
             {!! Form::label('title', 'Título*') !!} 
-            {!! Form::text('name', null, $attributes = ['class' => 'form-control']); !!}
+            {!! Form::text('title', null, $attributes = ['class' => 'form-control']); !!}
              @if (array_key_exists('title', $errors)) <span class="help-block">{{ $errors['title']['0'] }}</span> @endif
           </div>     
           <div class="form-group">
             {!! Form::label('author_id', 'Autor(es)') !!}
-            {!! Form::select('author_id', $authors, null, array('multiple' => true, 'class' => 'form-control')); !!}
+            {!! Form::select('author_id[]', $authors, null, array('multiple' => true, 'class' => 'form-control')); !!}
           </div>
           <div class="form-group">
             {!! Form::label('category_id', 'Categoria') !!}
@@ -65,13 +63,13 @@
             {!! Form::label ('type', 'Tipo') !!}<br>
             <div class="radio" style="display: inline">
               <label>
-                {!! Form::radio('read', 'paper'); !!}
+                {!! Form::radio('type', 'paper'); !!}
                 Papel
               </label>              
             </div>
             <div class="radio" style="display: inline">
               <label>
-                {!! Form::radio('read', 'ebook'); !!}
+                {!! Form::radio('type', 'ebook'); !!}
                 E-book
               </label>              
             </div>            

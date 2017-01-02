@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableBookAuthors extends Migration
+class CreateTableAuthorBook extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateTableBookAuthors extends Migration
      */
     public function up()
     {
-        Schema::create('book_authors', function (Blueprint $table) {
+        Schema::create('author_book', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('book_id')->unsigned();
             $table->integer('author_id')->unsigned();
-
-            $table->foreign('book_id')->references('id')->on('books');
+            $table->integer('book_id')->unsigned();
+            
             $table->foreign('author_id')->references('id')->on('authors');
+            $table->foreign('book_id')->references('id')->on('books');
+            
         });
     }
 
@@ -30,6 +31,6 @@ class CreateTableBookAuthors extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('book_authors');
+        Schema::dropIfExists('author_book');
     }
 }
